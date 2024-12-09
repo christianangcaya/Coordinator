@@ -1,0 +1,16 @@
+.batch-folders {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .folder {
+    text-align: center;
+    width: 100px;
+  }
+  
+  .folder img {
+    width: 100px;
+    height: auto;
+  }
+  
