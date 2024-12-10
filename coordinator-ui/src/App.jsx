@@ -12,8 +12,6 @@ import Login from "./components/Login";
 import "./App.css";
 
 
-
-
 const FolderDetails = () => {
   const { folderName } = useParams(); 
   return (
@@ -24,7 +22,7 @@ const FolderDetails = () => {
 };
 
 const Home = () => {
-  const batches = ["Batch '17", "Batch '18", "Batch '19", "Batch '20", "Batch '21", "Batch '22", "Batch '23", "Batch '14"]; 
+  const batches = ["Batch '17", "Batch '18", "Batch '19", "Batch '20", "Batch '21", "Batch '22", "Batch '23", "Batch '14"];//papalitan actual data galing db
   return (
     <div className="app">
       <Header />
@@ -49,7 +47,7 @@ const Home = () => {
 };
 
 const FolderPage = () => {
-  const batches = ["A-C", "D-F", "G-I", "J-L", "M-O", "P-R", "S-U", "V-X", "Y-Z"];
+  const batches = ["A-C", "D-F", "G-I", "J-L", "M-O", "P-R", "S-U", "V-X", "Y-Z"];//papalitan actual data galing db
   return (
     <div className="app">
       <Header />
@@ -159,7 +157,7 @@ const ScholarshipsPage = () =>{
       status: "Inactive",
       remarks: "Pending Documents",
     },
-  ];
+  ];//papalitan actual data galing db
 
 
   return(
