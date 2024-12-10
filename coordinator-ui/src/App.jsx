@@ -8,7 +8,11 @@ import SearchBar from "./components/SearchBar";
 import { useParams } from "react-router-dom";
 import BackButton from "./components/BackButton"
 import ScholarsTable from "./components/ScholarsTable";
+import Login from "./components/Login";
 import "./App.css";
+
+
+
 
 const FolderDetails = () => {
   const { folderName } = useParams(); 
@@ -32,9 +36,9 @@ const Home = () => {
             <SearchBar />
           </div>
           <div className="status-section">
-            <StatusCard title="Active Scholars" count="1,025" />
-            <StatusCard title="Inactive Scholars" count="348" />
-            <StatusCard title="Alumni" count="9,547" />
+            <StatusCard title="Active Scholars" count="1,025" directory="scholar"/>
+            <StatusCard title="Inactive Scholars" count="348" directory="scholar"/>
+            <StatusCard title="Alumni" count="9,547" directory="scholar"/>
           </div>
           <h3>Batch</h3>
           <BatchFolders batches={batches} directory="folder"/>
@@ -55,7 +59,7 @@ const FolderPage = () => {
           <div className="file-manager-header">
             <h2>Folder</h2>
             <SearchBar />
-            <BackButton link=""/>
+            <BackButton/>
           </div>
           <h3><FolderDetails /></h3>
           <BatchFolders batches={batches} directory="scholar" />
@@ -85,6 +89,7 @@ const ScholarshipsPage = () =>{
     },
   ];
 
+
   return(
     <div className="app">
     <Header />
@@ -93,7 +98,7 @@ const ScholarshipsPage = () =>{
         <div className="file-manager-header">
           <h2>Scholars</h2>
           <SearchBar />
-          <BackButton link="folder/"/>
+          <BackButton />
         </div>
         <h2><FolderDetails/></h2>
       <ScholarsTable scholars={scholars} />
@@ -103,12 +108,12 @@ const ScholarshipsPage = () =>{
   );
 };
 
-
 const App = () => {
   return (
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />}/>
+          <Route path="/home" element={<Home />} />
           <Route path="/folder/:folderName" element={<FolderPage />} />
           <Route path="/scholar/:folderName" element={<ScholarshipsPage />} />
         </Routes>

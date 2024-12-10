@@ -8,7 +8,7 @@ const BackButton = ({link}) => {
   const navigate = useNavigate(); // Move the hook inside the functional component
 
   const handleClick = () => {
-    navigate(`/${link}`)
+    navigate(-1)
   };
   return (
     <button className="back-button" onClick={handleClick}>
