@@ -24,7 +24,7 @@ const DocumentPopup = ({ scholar, onClose }) => {
         <button className="close-button" onClick={onClose}>
           ✕
         </button>
-        <div className="header">
+        <div className="header-sch">
           <h2>Personal Information</h2>
           <img
             src="https://via.placeholder.com/100" // Replace with the actual image URL or dynamic data
