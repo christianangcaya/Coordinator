@@ -27,18 +27,17 @@ const DocumentPopup = ({ scholar, onClose }) => {
         <div className="header-sch">
           <h2>Personal Information</h2>
           <img
-            src="https://via.placeholder.com/100" // Replace with the actual image URL or dynamic data
+            src="https://via.placeholder.com/100" 
             alt={`${scholar.name}'s Photo`}
             className="scholar-photo"
           />
         </div>
         <div className="personal-info">
           <p><strong>Name:</strong> {scholar.name}</p>
-          <p><strong>Scholar ID:</strong> GTW352F3HJ77</p> {/* Sample static Scholar ID */}
-          <p><strong>Status:</strong> {scholar.status}</p>
+          <p><strong>Scholar ID:</strong> GTW352F3HJ77</p> 
           <p><strong>Batch:</strong> {scholar.year}</p>
           <p><strong>Address:</strong> {scholar.address}</p>
-          <p><strong>Contact:</strong> 09298394938</p> {/* Sample static Contact */}
+          <p><strong>Contact:</strong> 09298394938</p> 
           <p><strong>School:</strong> {scholar.school}</p>
         </div>
         <h2>Documents</h2>
@@ -46,7 +45,7 @@ const DocumentPopup = ({ scholar, onClose }) => {
           {documents.map((doc, index) => (
             <div key={index} className="document-item">
               <img
-                src="https://via.placeholder.com/100" // Placeholder for document icons
+                src="https://via.placeholder.com/100" 
                 alt="Document Icon"
                 className="document-icon"
               />
