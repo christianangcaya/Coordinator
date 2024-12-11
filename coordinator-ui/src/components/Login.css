@@ -1,81 +1,149 @@
 .login-container {
-    display: flex;
-    height: 97vh;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #d9e7ff, #8ca6db);
-  }
-  
-  .login-left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #003366;
-  }
-  
-  .login-left .logo img {
-    width: 200px;
-    margin-top: 20px;
-  }
-  
-  .login-right {
-    flex: 1;
-    background: white;
-    padding: 20px 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: -4px 0px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  h2 {
-    margin-bottom: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .forgot-password {
-    font-size: 0.9em;
-    color: #003366;
-    text-decoration: none;
-  }
-  
-  .forgot-password:hover {
-    text-decoration: underline;
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #003366;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .login-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .error {
-    color: red;
-    font-size: 0.9em;
-    margin-bottom: 10px;
-  }
-  
+  display: flex;
+  height: 97vh;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(to bottom, #d9e7ff, #8ca6db);
+  margin: 0;
+}
+
+.login-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* Stacks the content vertically */
+  align-items: center; /* Centers items horizontally */
+  justify-content: center; /* Centers items vertically */
+  height: 97vh; /* Full viewport height */
+  padding: 20px; /* Padding for spacing */
+  text-align: center; /* Centers text */
+  background: linear-gradient(
+    to bottom,
+    #d9e7ff,
+    #8ca6db
+  ); /* Subtle gradient background */
+  color: #003366; /* White text for contrast */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-left h1 {
+  font-size: 2.5rem; /* Larger font size for the main heading */
+  font-weight: 700; /* Bold text */
+  margin-bottom: 10px; /* Spacing below the heading */
+}
+
+.login-left h2 {
+  font-size: 1.5rem; /* Slightly smaller subheading */
+  font-weight: 500; /* Medium weight text */
+  margin-bottom: 20px; /* Spacing below the subheading */
+}
+
+.login-left .logo {
+  margin-top: 20px; /* Space above the logo */
+}
+
+.login-left .logo img {
+  max-width: 200px; /* Ensures the logo is not too large */
+  height: auto; /* Maintains aspect ratio */
+}
+
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* Center the content horizontally */
+  align-items: center; /* Center the content vertically */
+  height: 97vh; /* Full viewport height */
+  background-color: #f7f9fc; /* Light background color for contrast */
+  padding: 20px;
+  box-shadow: -4px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.square-container {
+  width: 100%;
+  max-width: 400px; /* Restrict maximum width */
+  padding: 30px;
+  background-color: #ffffff; /* White background */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  text-align: center; /* Center text in the container */
+}
+
+.square-container h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #003366; /* Primary color */
+}
+
+/* Form styling */
+form {
+  width: 100%;
+}
+
+/* Form group styling */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left; /* Align labels and inputs to the left */
+}
+
+.form-group label {
+  display: block; /* Ensure the label is above the input */
+  font-size: 1em;
+  color: #555; /* Dark gray for text */
+  margin-bottom: 5px; /* Space between label and input */
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 4px; /* Rounded corners */
+  box-sizing: border-box; /* Ensure padding doesn’t affect width */
+}
+
+.form-group input:focus {
+  border-color: #003366; /* Highlight border on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Forgot password link */
+.forgot-password {
+  display: block;
+  font-size: 0.9em;
+  color: #003366;
+  text-align: right;
+  margin-top: 5px;
+  text-decoration: none; /* Remove underline */
+}
+
+.forgot-password:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Error message styling */
+.error {
+  color: #d9534f; /* Red for errors */
+  font-size: 0.9em;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+/* Login button styling */
+.login-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1em;
+  background-color: #003366; /* Primary color */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #002a5b; /* Slightly darker shade on hover */
+}
+
+.login-button:active {
+  background-color: #001f47; /* Even darker shade on click */
+}
