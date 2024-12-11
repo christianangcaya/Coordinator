@@ -1,9 +1,28 @@
 .status-card {
-    text-align: center;
-    background-color: #e3f2fd;
-    padding: 20px;
-    border-radius: 10px;
-    margin-right: 10px;
-    flex: 1;
-  }
-  
+  text-align: center; /* Centers the text inside the card */
+  background-color: #e3f2fd; /* Light blue background for a calm appearance */
+  padding: 20px; /* Comfortable inner spacing */
+  border-radius: 10px; /* Smooth rounded corners */
+  margin-right: 10px; /* Spacing between cards */
+  flex: 1; /* Allows flexible width in a flex container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+  font-family: "Inter", sans-serif;
+}
+
+.status-card:hover {
+  transform: translateY(-5px); /* Lifts the card slightly */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhances shadow on hover */
+}
+
+.status-card h2 {
+  font-size: 1.5em; /* Prominent heading size */
+  margin: 10px 0; /* Spacing above and below */
+  color: #003366; /* Dark blue for contrast */
+}
+
+.status-card p {
+  font-size: 1em; /* Regular paragraph size */
+  color: #555; /* Neutral gray for readability */
+  margin: 0; /* No extra spacing */
+}

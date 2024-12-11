@@ -23,7 +23,7 @@ const Header = () => {
           "You have been successfully logged out.",
           "success"
         ).then(() => {
-          navigate("/"); 
+          navigate("/");
         });
       }
     });
@@ -39,11 +39,9 @@ const Header = () => {
             <p>LOCAL GOVERNMENT UNIT - DAET</p>
           </div>
         </div>
-        <div className="container-btn">
-          <button className="logout-button" onClick={handleLogout}>
-            LOG OUT
-          </button>
-        </div>
+        <span className="logout-text" onClick={handleLogout}>
+          LOG OUT
+        </span>
       </div>
     </header>
   );

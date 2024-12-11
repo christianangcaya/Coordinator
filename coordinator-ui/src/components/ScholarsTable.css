@@ -1,61 +1,68 @@
 .scholars-table-container {
-    margin: 20px auto;
-    width: 90%;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .scholars-table-wrapper {
-    max-height: 400px; /* Set the desired table height */
-    overflow-y: auto; /* Enable vertical scrolling */
-  }
-  
-  .scholars-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-  }
-  
-  .scholars-table th, 
-  .scholars-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .scholars-table th {
-    background-color: #003399;
-    color: white;
-    font-weight: bold;
-    position: sticky;
-    top: 0; /* Keep headers visible while scrolling */
-    z-index: 1;
-  }
-  
-  .scholars-table tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .view-button {
-    padding: 6px 12px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-  }
-  
-  .view-button:hover {
-    background-color: #003399;
-  }
-  
-  
-  .main-content {
-    margin: 20px;
-  }
-  
+  margin: 20px auto;
+  width: 90%;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow for emphasis */
+  overflow: hidden;
+  position: relative; /* Ensure proper stacking context for table elements */
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+}
+
+.scholars-table-wrapper {
+  max-height: 400px; /* Ensures proper scrolling */
+  overflow-y: auto; /* Vertical scrolling for large tables */
+  border-radius: 8px; /* Prevents overflow cutting through border radius */
+}
+
+.scholars-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background-color: #ffffff; /* Explicit white background to prevent transparency issues */
+}
+
+.scholars-table th,
+.scholars-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd; /* Keeps rows visually distinct */
+  white-space: nowrap; /* Prevents text from wrapping excessively */
+  text-overflow: ellipsis; /* Truncates overflowing text */
+  overflow: hidden; /* Hides content that exceeds column width */
+}
+
+.scholars-table th {
+  background-color: #003399; /* Dark blue header */
+  color: white;
+  font-weight: bold;
+  position: sticky;
+  top: 0; /* Keeps headers visible while scrolling */
+  z-index: 2; /* Ensures headers stay above table content */
+}
+
+.scholars-table tr:hover {
+  background-color: #f3f7ff; /* Subtle hover effect for rows */
+}
+
+.view-button {
+  padding: 8px 14px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.view-button:hover {
+  background-color: #003399; /* Darker blue on hover */
+}
+
+.main-content {
+  margin: 20px;
+}
 
 /* Popup Overlay */
 .popup {
@@ -64,7 +71,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.8); /* Darker overlay */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,22 +81,22 @@
 /* Popup Content */
 .popup-content {
   background: #ffffff;
-  padding: 20px;
+  padding: 25px;
   border-radius: 10px;
   width: 90%;
   max-width: 700px;
   position: relative;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow */
   animation: fadeIn 0.3s ease-in-out;
   overflow-y: auto;
-  max-height: 90vh;
+  max-height: 90vh; /* Prevents overflow beyond viewport */
 }
 
 /* Close Button */
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
   background: #ff5c5c;
   color: #ffffff;
   border: none;
@@ -102,10 +109,11 @@
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease;
 }
 
 .close-button:hover {
-  background: #ff2c2c;
+  background: #ff2c2c; /* Darker red on hover */
 }
 
 .header-sch {
@@ -120,13 +128,13 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ddd;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: 3px solid #ddd; /* Slightly thicker border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
 }
 
 .personal-info {
   margin-bottom: 20px;
-  font-size: 14px;
+  font-size: 0.95em; /* Adjusted font size */
   color: #333;
 }
 
@@ -136,7 +144,10 @@
 
 .documents-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(120px, 1fr)
+  ); /* Responsive grid */
   gap: 20px;
 }
 
@@ -151,6 +162,11 @@
   width: 80px;
   height: 80px;
   margin-bottom: 10px;
+  transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.document-item:hover .document-icon {
+  transform: scale(1.1); /* Slightly enlarges on hover */
 }
 
 .document-item p {

@@ -1,16 +1,27 @@
 .batch-folders {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .folder {
-    text-align: center;
-    width: 100px;
-  }
-  
-  .folder img {
-    width: 100px;
-    height: auto;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start; /* Ensure items align to the left (optional) */
+  font-family: "Inter", sans-serif;
+}
+
+.folder {
+  text-align: center;
+  width: 100px;
+  flex-shrink: 0; /* Prevent folders from shrinking when resizing */
+  transition: transform 0.3s ease; /* Optional: Smooth scaling effect */
+}
+
+.folder:hover {
+  transform: scale(
+    1.05
+  ); /* Optional: Add a hover effect to slightly enlarge the folder */
+}
+
+.folder img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px; /* Optional: Slight border radius for a softer look */
+  object-fit: cover; /* Ensures the image doesn't get distorted */
+}

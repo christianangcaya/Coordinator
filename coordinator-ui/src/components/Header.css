@@ -1,51 +1,56 @@
 .header {
-
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo-img {
-    width: 50px;
-    margin-right: 15px;
-  }
-  
-  .logo h1 {
-    font-size: 18px;
-    margin: 0;
-    color: #333;
-  }
-  
-  .logo p {
-    font-size: 12px;
-    margin: 0;
-    color: #555;
-  }
-  
-  
-  .system-info h2 {
-    margin: 0;
-    font-size: 18px;
-  }
-  
-  .logout-button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .container-btn {
-    display: flex;
-    justify-content: flex-end;
+  font-family: "Inter", sans-serif;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
 }
-  
+
+.header-content {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  width: 50px;
+  height: auto;
+  margin-right: 15px;
+}
+
+.logo h1 {
+  font-size: 1.5em;
+  color: #333;
+  margin: 0;
+}
+
+.logo p {
+  font-size: 0.9em;
+  color: #555;
+  margin: 0;
+}
+
+.system-info h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.logout-text {
+  font-size: 1em;
+  color: #d33; /* Red color for visibility */
+  cursor: pointer;
+  text-decoration: none; /* No underline */
+  margin-left: auto;
+}
+
+.logout-text:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
