@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -10,6 +10,7 @@ import BackButton from "./components/BackButton"
 import ScholarsTable from "./components/ScholarsTable";
 import Login from "./components/Login";
 import "./App.css";
+import axios from "axios";
 
 
 const FolderDetails = () => {
@@ -22,7 +23,27 @@ const FolderDetails = () => {
 };
 
 const Home = () => {
-  const batches = ["Batch '17", "Batch '18", "Batch '19", "Batch '20", "Batch '21", "Batch '22", "Batch '23", "Batch '14"];//papalitan actual data galing db
+  const [folders, setFolders] = useState([]); 
+  const [error, setError] = useState("");
+  const [batches, setBatches] = useState([]);
+
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/folders");
+        const fetchedFolders = response.data;
+        setFolders(fetchedFolders)
+
+        setBatches(fetchedFolders);
+      } catch (err) {
+        console.error("Error fetching folder data:", err);
+        setError("Unable to fetch folder data. Please try again later.");
+      }
+    };
+
+    fetchFolders();
+  }, []);
+
   return (
     <div className="app">
       <Header />
@@ -47,7 +68,26 @@ const Home = () => {
 };
 
 const FolderPage = () => {
-  const batches = ["A-C", "D-F", "G-I", "J-L", "M-O", "P-R", "S-U", "V-X", "Y-Z"];//papalitan actual data galing db
+  const [batches, setBatches] = useState([]);
+  const [error, setError] = useState("");
+  const { folderName } = useParams();
+
+  useEffect(() => {
+    if (folderName) {
+      const fetchFolderData = async () => {
+        try {
+          const response = await axios.get(`http://127.0.0.1:5000/api/folder/${folderName}`);
+          setBatches(response.data);
+        } catch (err) {
+          console.error("Error fetching folder data:", err);
+          setError("Unable to fetch folder data. Please try again later.");
+        }
+      };
+
+      fetchFolderData();
+    }
+  }, [folderName]);
+
   return (
     <div className="app">
       <Header />
@@ -67,114 +107,63 @@ const FolderPage = () => {
   );
 };
 
-const ScholarshipsPage = () =>{
-  const scholars = [
-    {
-      name: "Angcaya, Christian C.",
-      year: 2022,
-      address: "Brgy, Cobangbang Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Active",
-      remarks: "Verified",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-    {
-      name: "Abdula, Abner Javar.",
-      year: 2022,
-      address: "Brgy, Camambugan Daet, Camarines Norte",
-      school: "CNSC - Main Campus",
-      status: "Inactive",
-      remarks: "Pending Documents",
-    },
-  ];//papalitan actual data galing db
+const ScholarshipsPage = () => {
+  const [scholarshipData, setScholarshipData] = useState([]);
 
+  const fetchScholarshipData = async () => {
+    try {
+      const folderName = "2024"; 
+      const subfolderName = "A-C";
 
-  return(
+      const response = await fetch(`http://127.0.0.1:5000/api/folder/${folderName}/${subfolderName}`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setScholarshipData(data);
+      console.log("Scholarship Data:", data);
+    } catch (error) {
+      console.error("Error fetching scholarship data:", error);
+    }
+  };
+
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchScholarshipData();
+  }, []);
+
+  return (
     <div className="app">
-    <Header />
-    <div className="main-content">
-      <div className="content">
-        <div className="file-manager-header">
-          <h2>Scholars</h2>
-          <SearchBar />
-          <BackButton />
+      <Header />
+      <div className="main-content">
+        <div className="content">
+          <div className="file-manager-header">
+            <h2>Scholars</h2>
+            <SearchBar />
+            <BackButton />
+          </div>
+          <h2><FolderDetails /></h2>
+          
+          {/* Add ScholarsTable */}
+          <ScholarsTable scholars={scholarshipData} />
+
+          {/* Render scholarship data directly if needed */}
+          <div className="scholarship-list">
+            <h3>Scholarship Data:</h3>
+            <ul>
+              {scholarshipData.length > 0 ? (
+                scholarshipData.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))
+              ) : (
+                <li>No data available</li>
+              )}
+            </ul>
+          </div>
         </div>
-        <h2><FolderDetails/></h2>
-      <ScholarsTable scholars={scholars} />
       </div>
     </div>
-  </div>
   );
 };
 
