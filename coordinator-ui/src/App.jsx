@@ -11,6 +11,14 @@ import ScholarsTable from "./components/ScholarsTable";
 import Login from "./components/Login";
 import "./App.css";
 
+const FolderDetailsBatch = () => {
+  const { folderNames } = useParams(); 
+  return (
+    <div>
+      <p>{folderNames}</p>
+    </div>
+  );
+};
 
 const FolderDetails = () => {
   const { folderName } = useParams(); 
@@ -34,6 +42,7 @@ const Home = () => {
             <SearchBar />
           </div>
           <div className="status-section">
+          <StatusCard title="Appplicants" count="1,000" directory="scholar"/>
             <StatusCard title="Active Scholars" count="1,025" directory="scholar"/>
             <StatusCard title="Inactive Scholars" count="348" directory="scholar"/>
             <StatusCard title="Alumni" count="9,547" directory="scholar"/>
@@ -59,7 +68,7 @@ const FolderPage = () => {
             <SearchBar />
             <BackButton/>
           </div>
-          <h3><FolderDetails /></h3>
+          <h3><FolderDetailsBatch/></h3>
           <BatchFolders batches={batches} directory="scholar" />
         </div>
       </div>
@@ -170,7 +179,7 @@ const ScholarshipsPage = () =>{
           <SearchBar />
           <BackButton />
         </div>
-        <h2><FolderDetails/></h2>
+        <h2><FolderDetailsBatch/><FolderDetails/></h2>
       <ScholarsTable scholars={scholars} />
       </div>
     </div>
@@ -184,7 +193,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login />}/>
           <Route path="/home" element={<Home />} />
-          <Route path="/folder/:folderName" element={<FolderPage />} />
+          <Route path="/folder/:folderNames" element={<FolderPage />} />
           <Route path="/scholar/:folderName" element={<ScholarshipsPage />} />
         </Routes>
       </Router>
