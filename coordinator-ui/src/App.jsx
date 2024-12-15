@@ -43,6 +43,7 @@ const Home = () => {
           </div>
           <div className="status-section">
           <StatusCard title="Appplicants" count="1,000" directory="scholar"/>
+          <StatusCard title="Pending Scholars" count="125" directory="scholar"/>
             <StatusCard title="Active Scholars" count="1,025" directory="scholar"/>
             <StatusCard title="Inactive Scholars" count="348" directory="scholar"/>
             <StatusCard title="Alumni" count="9,547" directory="scholar"/>
