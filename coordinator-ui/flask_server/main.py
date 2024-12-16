@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import os
 from flask_cors import CORS
 import re
@@ -147,6 +147,104 @@ def list_files(batch, index, last_name, application_id):
         app.logger.error(f"Error listing files: {str(e)}")
         return jsonify({"error": f"Unable to list files: {str(e)}"}), 500
     
+@app.route("/api/applicants", methods=["GET"])
+def get_applicants_with_info():
+    try:
+        # Establish the database connection
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor(dictionary=True)
+        
+        # Query to fetch applicants with their corresponding info from af_basic_info
+        query = """
+        SELECT 
+            a.application_id, 
+            a.status,
+            COALESCE(a.remarks, 'N/A') AS remarks,
+            b.last_name, 
+            b.first_name, 
+            b.middle_name, 
+            b.contact_number,
+            b.suffix, 
+            b.street, 
+            b.purok, 
+            b.barangay, 
+            b.municipality,
+            c.school_name
+        FROM 
+            applicants a
+        JOIN 
+            af_basic_info b
+        ON 
+            a.application_id = b.applicant_id
+        JOIN 
+            af_educ_info c
+        ON 
+            a.application_id = c.applicant_id
+        WHERE 
+            a.status = 'applicant';
+        """
+        
+        cursor.execute(query)
+        
+        # Fetch all rows
+        applicants_with_info = cursor.fetchall()
+        print(applicants_with_info)
+        # Return the result as JSON
+        if not applicants_with_info:
+            return jsonify({"error": "No applicants found"}), 404
+        
+        return jsonify(applicants_with_info), 200
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return jsonify({"error": "Database error"}), 500
+
+    finally:
+        # Ensure cursor and connection are closed
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+
+@app.route('/api/applicants/<applicant_id>', methods=['PUT'])
+def update_applicant_status(applicant_id):
+    try:
+        new_status = request.json.get("status")
+        
+        # Ensure the status is provided and is 'scholar'
+        if new_status != "scholar":
+            return jsonify({"error": "Invalid status. Must be 'scholar'."}), 400
+        
+        # Establish the connection to the database
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        
+        # Update the status in the database
+        update_query = """
+            UPDATE applicants
+            SET status = %s
+            WHERE application_id = %s
+        """
+        cursor.execute(update_query, (new_status, applicant_id))
+        connection.commit()
+        
+        # Check if any row was affected
+        if cursor.rowcount == 0:
+            return jsonify({"error": "Applicant not found."}), 404
+        
+        return jsonify({"success": True, "message": f"Applicant {applicant_id} status updated to scholar."})
+    
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return jsonify({"error": "Error updating applicant status"}), 500
+    
+    finally:
+        # Close the cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
 
 if __name__ == "__main__":
     app.run(debug=True)

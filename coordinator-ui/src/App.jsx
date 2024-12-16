@@ -11,6 +11,7 @@ import ScholarsTable from "./components/ScholarsTable";
 import Login from "./components/Login";
 import "./App.css";
 import axios from "axios";
+import ApplicantsPage from "./components/ApplicantsPage";
 
 const FolderDetails = () => {
   const { folderName } = useParams();
@@ -54,7 +55,7 @@ const Home = () => {
             <SearchBar />
           </div>
           <div className="status-section">
-            <StatusCard title="Appplicants" count="1,000" directory="scholar" />
+            <StatusCard title="Applicants" count="1,000" directory="scholar" />
             <StatusCard
               title="Pending Scholars"
               count="125"
@@ -197,6 +198,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/folder/:folderName" element={<FolderPage />} />
+        <Route path="/scholar/Applicants" element={<ApplicantsPage />} />
         <Route
           path="/scholar/:folderName/:subfolderName"
           element={<ScholarshipsPage />}

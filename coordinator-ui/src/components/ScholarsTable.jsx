@@ -137,6 +137,7 @@ const ScholarsTable = ({ scholars }) => {
               <th>Status</th>
               <th>Remarks</th>
               <th>Documents</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -156,6 +157,7 @@ const ScholarsTable = ({ scholars }) => {
                     VIEW
                   </button>
                 </td>
+                <td>{scholar.actions}</td>
               </tr>
             ))}
           </tbody>

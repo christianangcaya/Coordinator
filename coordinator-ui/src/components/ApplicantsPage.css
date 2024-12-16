@@ -1,0 +1,37 @@
+.applicants-page .accept-btn {
+    background-color: #4caf50; /* Green */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .applicants-page .reject-btn {
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .applicants-page .accept-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .applicants-page .reject-btn:hover {
+    background-color: #e53935;
+  }
+  
+  /* If the table is in .applicants-page, add extra specific styles */
+  .applicants-page table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .applicants-page table th,
+  .applicants-page table td {
+    padding: 8px;
+  }
+  
