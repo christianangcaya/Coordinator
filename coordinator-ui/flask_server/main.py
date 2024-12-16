@@ -126,7 +126,27 @@ def get_subfolder_data(folder_name, subfolder_name):
         print(f"Database error: {err}")
         return jsonify({"error": "Database error"}), 500
 
+@app.route('/api/<batch>/<index>/<last_name>/<application_id>/scholar_files', methods=['GET'])
+def list_files(batch, index, last_name, application_id):
+    base_path = os.path.join(
+        "C:/LGU Daet Scholarship", batch, index, f"{last_name}{application_id}", "Final Requirements"
+    )
+    app.logger.info("Request received for files.")
+    app.logger.info(f"Batch: {batch}, Index: {index}, Last Name: {last_name}, Application ID: {application_id}")
+    app.logger.info(f"Constructed base path: {base_path}")
 
+    if not os.path.exists(base_path):
+        app.logger.error(f"Directory does not exist: {base_path}")
+        return jsonify({"error": f"Directory {base_path} does not exist"}), 404
+
+    try:
+        files = os.listdir(base_path)
+        app.logger.info(f"Files found: {files}")
+        return jsonify({"files": files}), 200
+    except Exception as e:
+        app.logger.error(f"Error listing files: {str(e)}")
+        return jsonify({"error": f"Unable to list files: {str(e)}"}), 500
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
