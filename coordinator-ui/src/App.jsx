@@ -154,11 +154,14 @@ const ScholarshipsPage = () => {
   }, [folderName, subfolderName]);
 
   const scholars = scholarshipData.map((scholar) => ({
-    name: `${scholar.last_name}, ${scholar.first_name} ${scholar.middle_name} ${
-      scholar.suffix || ""
-    }`.trim(),
+    applicant_id: scholar.applicant_id,
+    applicant_profile: scholar.photo_path,
+    contact_number: scholar.contact_number,
+    name: `${scholar.last_name}, ${scholar.first_name}${
+      scholar.middle_name ? ` ${scholar.middle_name}` : ""
+    }${scholar.suffix ? ` ${scholar.suffix}` : ""}`.trim(),
     year: scholar.applicant_id.slice(0, 4),
-    address: `${scholar.street}, ${scholar.purok}, ${scholar.barangay}, ${scholar.municipality}`,
+    address: `${scholar.street ? `${scholar.street}, ` : ""}${scholar.purok}, ${scholar.barangay}, ${scholar.municipality}`,
     school: scholar.school_name,
     status: "Active",
     remarks: "Verified",

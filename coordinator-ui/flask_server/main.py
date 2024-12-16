@@ -69,7 +69,8 @@ def get_subfolder_data(folder_name, subfolder_name):
                     street, 
                     purok, 
                     barangay, 
-                    municipality 
+                    municipality,
+                    contact_number
                 FROM af_basic_info 
                 WHERE applicant_id IN (%s)
             """
@@ -92,6 +93,20 @@ def get_subfolder_data(folder_name, subfolder_name):
             cursor.execute(formatted_query_educ_info, last_8_digits)
             educ_info_results = cursor.fetchall()
 
+            # Query the af_file_initial table
+            query_file_initial = """
+                SELECT 
+                    applicant_id, 
+                    photo_path 
+                FROM af_file_initial 
+                WHERE applicant_id IN (%s)
+            """
+
+            formatted_query_file_initial = query_file_initial % placeholders
+
+            cursor.execute(formatted_query_file_initial, last_8_digits)
+            file_initial_results = cursor.fetchall()
+
             # Close the database connection
             cursor.close()
             connection.close()
@@ -111,6 +126,7 @@ def get_subfolder_data(folder_name, subfolder_name):
         print(f"Database error: {err}")
         return jsonify({"error": "Database error"}), 500
 
-    
+
+
 if __name__ == "__main__":
     app.run(debug=True)

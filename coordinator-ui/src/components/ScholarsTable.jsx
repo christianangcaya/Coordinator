@@ -18,6 +18,8 @@ const DocumentPopup = ({ scholar, onClose }) => {
     "Application Form",
   ];
 
+  console.log(scholar.applicant_profile)
+
   return (
     <div className="popup">
       <div className="popup-content">
@@ -34,10 +36,10 @@ const DocumentPopup = ({ scholar, onClose }) => {
         </div>
         <div className="personal-info">
           <p><strong>Name:</strong> {scholar.name}</p>
-          <p><strong>Scholar ID:</strong> GTW352F3HJ77</p> 
+          <p><strong>Scholar ID:</strong> {scholar.applicant_id}</p> 
           <p><strong>Batch:</strong> {scholar.year}</p>
           <p><strong>Address:</strong> {scholar.address}</p>
-          <p><strong>Contact:</strong> 09298394938</p> 
+          <p><strong>Contact:</strong> {scholar.contact_number}</p> 
           <p><strong>School:</strong> {scholar.school}</p>
         </div>
         <h2>Documents</h2>
