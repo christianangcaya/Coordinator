@@ -2,8 +2,16 @@ from flask import Flask, jsonify
 import os
 from flask_cors import CORS
 import re
+import mysql.connector
 
 app = Flask(__name__)
+
+db_config = {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "scholarship_db"
+}
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -39,18 +47,70 @@ def get_subfolder_data(folder_name, subfolder_name):
         if os.path.isdir(base_path):
             subfolder_contents = os.listdir(base_path)
             
+            # Extract last 8 digits from subfolder contents
             last_8_digits = []
             for item in subfolder_contents:
                 match = re.search(r'(\d{8})$', item)
                 if match:
                     last_8_digits.append(match.group(1))
+            
+            # Connect to MySQL database
+            connection = mysql.connector.connect(**db_config)
+            cursor = connection.cursor(dictionary=True)
 
-            print(f"Contents of {subfolder_name} in {folder_name}: {last_8_digits}")
-            return jsonify(last_8_digits)
+            # Query the af_basic_info table
+            query_basic_info = """
+                SELECT 
+                    applicant_id, 
+                    last_name, 
+                    first_name, 
+                    middle_name, 
+                    suffix, 
+                    street, 
+                    purok, 
+                    barangay, 
+                    municipality 
+                FROM af_basic_info 
+                WHERE applicant_id IN (%s)
+            """
+            placeholders = ", ".join(["%s"] * len(last_8_digits))
+            formatted_query_basic_info = query_basic_info % placeholders
+            
+            cursor.execute(formatted_query_basic_info, last_8_digits)
+            basic_info_results = cursor.fetchall()
+
+            # Query the af_educ_info table
+            query_educ_info = """
+                SELECT 
+                    applicant_id, 
+                    school_name 
+                FROM af_educ_info 
+                WHERE applicant_id IN (%s)
+            """
+            formatted_query_educ_info = query_educ_info % placeholders
+            
+            cursor.execute(formatted_query_educ_info, last_8_digits)
+            educ_info_results = cursor.fetchall()
+
+            # Close the database connection
+            cursor.close()
+            connection.close()
+
+            # Merge results from both tables
+            educ_info_dict = {row['applicant_id']: row['school_name'] for row in educ_info_results}
+            for applicant in basic_info_results:
+                applicant['school_name'] = educ_info_dict.get(applicant['applicant_id'], None)
+
+            print(f"Contents of {subfolder_name} in {folder_name}: {basic_info_results}")
+            return jsonify(basic_info_results)
         else:
             return jsonify({"error": f"Subfolder {subfolder_name} not found in {folder_name}"}), 404
     except FileNotFoundError:
         return jsonify({"error": "Folder or subfolder not found"}), 404
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        return jsonify({"error": "Database error"}), 500
 
+    
 if __name__ == "__main__":
     app.run(debug=True)

@@ -12,14 +12,6 @@ import Login from "./components/Login";
 import "./App.css";
 import axios from "axios";
 
-const FolderDetailsBatch = () => {
-  const { folderNames } = useParams(); 
-  return (
-    <div>
-      <p>{folderNames}</p>
-    </div>
-  );
-};
 
 const FolderDetails = () => {
   const { folderName } = useParams(); 
@@ -109,7 +101,7 @@ const FolderPage = () => {
             <SearchBar />
             <BackButton/>
           </div>
-          <h3><FolderDetailsBatch/></h3>
+          <h3><FolderDetails /></h3>
           <BatchFolders batches={batches} directory="scholar" />
         </div>
       </div>
@@ -143,7 +135,18 @@ const ScholarshipsPage = () => {
     fetchScholarshipData();
   }, []);
 
-  return (
+  const scholars = scholarshipData.map((scholar) => ({
+    name: `${scholar.last_name}, ${scholar.first_name} ${scholar.middle_name} ${scholar.suffix || ""}`.trim(),
+    year: scholar.applicant_id.slice(0, 4),
+    address: `${scholar.street}, ${scholar.purok}, ${scholar.barangay}, ${scholar.municipality}`,
+    school: scholar.school_name,
+    status: "Active",
+    remarks: "Verified",
+  }));
+
+
+
+  return(
     <div className="app">
     <Header />
     <div className="main-content">
@@ -167,7 +170,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login />}/>
           <Route path="/home" element={<Home />} />
-          <Route path="/folder/:folderNames" element={<FolderPage />} />
+          <Route path="/folder/:folderName" element={<FolderPage />} />
           <Route path="/scholar/:folderName" element={<ScholarshipsPage />} />
         </Routes>
       </Router>
