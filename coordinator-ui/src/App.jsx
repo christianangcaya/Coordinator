@@ -13,6 +13,9 @@ import "./App.css";
 import axios from "axios";
 import ApplicantsPage from "./components/ApplicantsPage";
 import PendingScholarsPage from "./components/PendingScholarsPage";
+import ActiveScholarsPage from "./components/ActiveScholarsPage";
+import AlumniPage from "./components/AlumniPage";
+import InactiveScholarsPage from "./components/InactiveScholarsPage";
 
 const FolderDetails = () => {
   const { folderName } = useParams();
@@ -29,6 +32,9 @@ const Home = () => {
   const [batches, setBatches] = useState([]);
   const [applicantCount, setApplicantCount] = useState(null);
   const [pending_scholarCount, setPendingScholarCount] = useState(null);
+  const [active_scholarCount, setActiveScholarCount] = useState(null);
+  const [inactive_scholarCount, setInactiveScholarCount] = useState(null);
+  const [alumniCount, setAlumniCount] = useState(null);
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -63,9 +69,42 @@ const Home = () => {
       }
     };
 
+    const fetchActiveScholarCount = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/active_scholars/count");
+        setActiveScholarCount(response.data.active_scholar_count);
+      } catch (err) {
+        console.error("Error fetching applicant count:", err);
+        setError("Unable to fetch applicant count. Please try again later.");
+      }
+    };
+
+    const fetchInactiveScholarCount = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/inactive_scholars/count");
+        setInactiveScholarCount(response.data.inactive_scholar_count);
+      } catch (err) {
+        console.error("Error fetching applicant count:", err);
+        setError("Unable to fetch applicant count. Please try again later.");
+      }
+    };
+
+    const fetchAlumniCount = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/alumni/count");
+        setAlumniCount(response.data.alumni_count);
+      } catch (err) {
+        console.error("Error fetching applicant count:", err);
+        setError("Unable to fetch applicant count. Please try again later.");
+      }
+    };
+
     fetchFolders();
     fetchApplicantCount();
     fetchPendingScholarCount();
+    fetchActiveScholarCount();
+    fetchInactiveScholarCount();
+    fetchAlumniCount();
   }, []);
 
   return (
@@ -90,16 +129,19 @@ const Home = () => {
               directory="scholar"
             />
             <StatusCard
-              title="Active Scholars"
-              count="1,025"
+              title="Active-Scholars"
+              count={active_scholarCount !== null ? active_scholarCount : 'Loading...'}
               directory="scholar"
             />
             <StatusCard
-              title="Inactive Scholars"
-              count="348"
+              title="Inactive-Scholars"
+              count={inactive_scholarCount !== null ? inactive_scholarCount : 'Loading...'}
               directory="scholar"
             />
-            <StatusCard title="Alumni" count="9,547" directory="scholar" />
+            <StatusCard 
+              title="Alumni" 
+              count={alumniCount !== null ? alumniCount : 'Loading...'} 
+              directory="scholar" />
           </div>
           <h3>Batch</h3>
           <BatchFolders batches={batches} directory="folder" />
@@ -228,6 +270,9 @@ const App = () => {
         <Route path="/folder/:folderName" element={<FolderPage />} />
         <Route path="/scholar/Applicants" element={<ApplicantsPage />} />
         <Route path="/scholar/Pending-Scholars" element={<PendingScholarsPage />} />
+        <Route path="/scholar/Active-Scholars" element={<ActiveScholarsPage />} />
+        <Route path="/scholar/Inactive-Scholars" element={<InactiveScholarsPage />} />
+        <Route path="/scholar/Alumni" element={<AlumniPage />} />
         <Route
           path="/scholar/:folderName/:subfolderName"
           element={<ScholarshipsPage />}

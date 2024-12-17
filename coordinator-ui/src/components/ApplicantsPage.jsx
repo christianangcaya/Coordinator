@@ -60,6 +60,7 @@ const ApplicantsPage = () => {
       });
 
       if (response.data.success) {
+        window.location.reload();
         setScholars((prevApplicants) =>
           prevApplicants.map((applicant) =>
             applicant.application_id === applicantId
