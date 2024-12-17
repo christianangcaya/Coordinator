@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import "./App.css";
 import axios from "axios";
 import ApplicantsPage from "./components/ApplicantsPage";
+import PendingScholarsPage from "./components/PendingScholarsPage";
 
 const FolderDetails = () => {
   const { folderName } = useParams();
@@ -26,6 +27,8 @@ const Home = () => {
   const [folders, setFolders] = useState([]);
   const [error, setError] = useState("");
   const [batches, setBatches] = useState([]);
+  const [applicantCount, setApplicantCount] = useState(null);
+  const [pending_scholarCount, setPendingScholarCount] = useState(null);
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -33,7 +36,6 @@ const Home = () => {
         const response = await axios.get("http://127.0.0.1:5000/api/folders");
         const fetchedFolders = response.data;
         setFolders(fetchedFolders);
-
         setBatches(fetchedFolders);
       } catch (err) {
         console.error("Error fetching folder data:", err);
@@ -41,7 +43,29 @@ const Home = () => {
       }
     };
 
+    const fetchApplicantCount = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/applicants/count");
+        setApplicantCount(response.data.applicant_count);
+      } catch (err) {
+        console.error("Error fetching applicant count:", err);
+        setError("Unable to fetch applicant count. Please try again later.");
+      }
+    };
+
+    const fetchPendingScholarCount = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/pending_scholars/count");
+        setPendingScholarCount(response.data.pending_scholar_count);
+      } catch (err) {
+        console.error("Error fetching applicant count:", err);
+        setError("Unable to fetch applicant count. Please try again later.");
+      }
+    };
+
     fetchFolders();
+    fetchApplicantCount();
+    fetchPendingScholarCount();
   }, []);
 
   return (
@@ -55,10 +79,14 @@ const Home = () => {
             <SearchBar />
           </div>
           <div className="status-section">
-            <StatusCard title="Applicants" count="1,000" directory="scholar" />
+            <StatusCard 
+              title="Applicants" 
+              count={applicantCount !== null ? applicantCount : 'Loading...'}
+              directory="scholar" 
+            />
             <StatusCard
-              title="Pending Scholars"
-              count="125"
+              title="Pending-Scholars"
+              count={pending_scholarCount !== null ? pending_scholarCount : 'Loading...'}
               directory="scholar"
             />
             <StatusCard
@@ -199,6 +227,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/folder/:folderName" element={<FolderPage />} />
         <Route path="/scholar/Applicants" element={<ApplicantsPage />} />
+        <Route path="/scholar/Pending-Scholars" element={<PendingScholarsPage />} />
         <Route
           path="/scholar/:folderName/:subfolderName"
           element={<ScholarshipsPage />}

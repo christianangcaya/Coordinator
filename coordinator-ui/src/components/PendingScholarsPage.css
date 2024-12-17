@@ -1,0 +1,37 @@
+.pending-scholars-page .accept-btn {
+    background-color: #4caf50; /* Green */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .pending-scholars-page .reject-btn {
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .pending-scholars-page .accept-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .pending-scholars-page .reject-btn:hover {
+    background-color: #e53935;
+  }
+  
+  /* If the table is in .pending-scholars-page, add extra specific styles */
+  .pending-scholars-page table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .pending-scholars-page table th,
+  .pending-scholars-page table td {
+    padding: 8px;
+  }
+  

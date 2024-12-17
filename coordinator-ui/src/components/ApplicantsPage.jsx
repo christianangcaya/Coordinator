@@ -8,11 +8,10 @@ const ApplicantsPage = () => {
   const [applicantsData, setScholars] = useState([]);
 
   useEffect(() => {
-    // Fetch applicants data from the backend
     const fetchApplicants = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:5000/api/applicants");
-        setScholars(response.data);  // Save the applicants data
+        setScholars(response.data);
       } catch (error) {
         console.error("Error fetching applicants data:", error);
       }
@@ -56,17 +55,15 @@ const ApplicantsPage = () => {
 
   const handleAccept = async (applicantId) => {
     try {
-      // Call the backend API to update the status to "scholar"
       const response = await axios.put(`http://127.0.0.1:5000/api/applicants/${applicantId}`, {
-        status: "scholar",
+        status: "pending_scholar",
       });
 
       if (response.data.success) {
-        // Update the local state with the updated status
         setScholars((prevApplicants) =>
           prevApplicants.map((applicant) =>
             applicant.application_id === applicantId
-              ? { ...applicant, status: "Scholar" }
+              ? { ...applicant, status: "Pending_Scholar" }
               : applicant
           )
         );
@@ -82,7 +79,6 @@ const ApplicantsPage = () => {
 
   const handleReject = (applicantId) => {
     console.log(`Rejected applicant with ID: ${applicantId}`);
-    // Add your reject logic or API call here
   };
 
   return (

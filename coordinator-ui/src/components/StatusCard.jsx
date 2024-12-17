@@ -9,12 +9,13 @@ const StatusCard = ({ title, count, directory }) => {
     navigate(`/${directory}/${title}`); 
     //navigate("/folder")
   };
+  const displayTitle = title.replace("-", " ");
 
 
   return (
-    <div className="status-card" onClick={handleStatusClick}>
+    <div className="status-card" onClick={handleStatusClick} id={title}>
       <h3>{count}</h3>
-      <p>{title}</p>
+      <p>{displayTitle}</p>
     </div>
   );
 };

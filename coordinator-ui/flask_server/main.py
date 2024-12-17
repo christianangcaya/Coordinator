@@ -212,15 +212,12 @@ def update_applicant_status(applicant_id):
     try:
         new_status = request.json.get("status")
         
-        # Ensure the status is provided and is 'scholar'
-        if new_status != "scholar":
-            return jsonify({"error": "Invalid status. Must be 'scholar'."}), 400
+        if new_status != "pending_scholar":
+            return jsonify({"error": "Invalid status. Must be 'pending_scholar'."}), 400
         
-        # Establish the connection to the database
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
         
-        # Update the status in the database
         update_query = """
             UPDATE applicants
             SET status = %s
@@ -229,7 +226,114 @@ def update_applicant_status(applicant_id):
         cursor.execute(update_query, (new_status, applicant_id))
         connection.commit()
         
-        # Check if any row was affected
+        if cursor.rowcount == 0:
+            return jsonify({"error": "Applicant not found."}), 404
+        
+        return jsonify({"success": True, "message": f"Applicant {applicant_id} status updated to pending_scholar."})
+    
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return jsonify({"error": "Error updating applicant status"}), 500
+    
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+
+@app.route('/api/applicants/count', methods=['GET'])
+def get_applicants_count():
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT COUNT(*) FROM applicants WHERE status = 'applicant'")
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({"applicant_count": result[0]})
+
+    except mysql.connector.Error as err:
+        return jsonify({"error": str(err)}), 500
+
+
+@app.route("/api/pending_scholars", methods=["GET"])
+def get_pending_scholars_with_info():
+    try:
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor(dictionary=True)
+        
+        query = """
+        SELECT 
+            a.application_id, 
+            a.status,
+            COALESCE(a.remarks, 'N/A') AS remarks,
+            b.last_name, 
+            b.first_name, 
+            b.middle_name, 
+            b.contact_number,
+            b.suffix, 
+            b.street, 
+            b.purok, 
+            b.barangay, 
+            b.municipality,
+            c.school_name
+        FROM 
+            applicants a
+        JOIN 
+            af_basic_info b
+        ON 
+            a.application_id = b.applicant_id
+        JOIN 
+            af_educ_info c
+        ON 
+            a.application_id = c.applicant_id
+        WHERE 
+            a.status = 'pending_scholar';
+        """
+        
+        cursor.execute(query)
+        
+        applicants_with_info = cursor.fetchall()
+        print(applicants_with_info)
+        if not applicants_with_info:
+            return jsonify({"error": "No applicants found"}), 404
+        
+        return jsonify(applicants_with_info), 200
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return jsonify({"error": "Database error"}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+
+@app.route('/api/pending_scholars/<applicant_id>', methods=['PUT'])
+def update_pending_scholars_status(applicant_id):
+    try:
+        new_status = request.json.get("status")
+        
+        if new_status != "scholar":
+            return jsonify({"error": "Invalid status. Must be 'scholar'."}), 400
+        
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        
+        update_query = """
+            UPDATE applicants
+            SET status = %s
+            WHERE application_id = %s
+        """
+        cursor.execute(update_query, (new_status, applicant_id))
+        connection.commit()
+        
         if cursor.rowcount == 0:
             return jsonify({"error": "Applicant not found."}), 404
         
@@ -240,11 +344,29 @@ def update_applicant_status(applicant_id):
         return jsonify({"error": "Error updating applicant status"}), 500
     
     finally:
-        # Close the cursor and connection
         if cursor:
             cursor.close()
         if connection:
             connection.close()
+
+
+@app.route('/api/pending_scholars/count', methods=['GET'])
+def get_pending_scholars_count():
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT COUNT(*) FROM applicants WHERE status = 'pending_scholar'")
+        result = cursor.fetchone()
+        print(result)
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({"pending_scholar_count": result[0]})
+
+    except mysql.connector.Error as err:
+        return jsonify({"error": str(err)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
