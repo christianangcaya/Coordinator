@@ -8,6 +8,7 @@ const DocumentPopup = ({ scholar, onClose }) => {
   const name = `${scholar.last_name}, ${scholar.first_name} ${scholar.middle_name} ${scholar.suffix}`;
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const applicationId = scholar.applicant_id;
 
   useEffect(() => {
@@ -31,6 +32,11 @@ const DocumentPopup = ({ scholar, onClose }) => {
       fetchFiles();
     }
   }, [scholar]);
+
+  // Function to close the preview
+  const closePreview = () => {
+    setPreviewImage(null);
+  };
 
   return (
     <div className="popup">
@@ -71,7 +77,12 @@ const DocumentPopup = ({ scholar, onClose }) => {
         <div className="documents-grid">
           {files.length > 0 ? (
             files.map((fileUrl, index) => (
-              <div key={index} className="document-item">
+              <div
+                key={index}
+                className="document-item"
+                onClick={() => setPreviewImage(fileUrl)} // Set preview image on click
+                style={{ cursor: "pointer" }}
+              >
                 <img
                   src={fileUrl} // Use the file URL provided by the server
                   alt={`Document ${index + 1}`}
@@ -85,6 +96,20 @@ const DocumentPopup = ({ scholar, onClose }) => {
             <p>No files available.</p>
           )}
         </div>
+        {/* Image Preview Modal */}
+        {previewImage && (
+          <div className="image-preview-modal" onClick={closePreview}>
+            <div
+              className="image-preview-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="close-preview" onClick={closePreview}>
+                ✕
+              </button>
+              <img src={previewImage} alt="Preview" className="preview-image" />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
