@@ -8,6 +8,7 @@ import "./PendingScholarsPage.css";
 
 const ActiveScholarsPage = () => {
   const [activeScholars, setActiveScholars] = useState([]);
+  const [filteredScholars, setFilteredScholars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -54,9 +55,10 @@ const ActiveScholarsPage = () => {
         }));
 
         setActiveScholars(formattedScholars);
+        setFilteredScholars(formattedScholars);
       } catch (err) {
-        console.error("Error fetching pending scholars:", err);
-        setError("Failed to load pending scholars.");
+        console.error("Error fetching active scholars:", err);
+        setError("Failed to load active scholars.");
       } finally {
         setLoading(false);
       }
@@ -72,19 +74,19 @@ const ActiveScholarsPage = () => {
       });
 
       if (response.data.success) {
-        setScholars((prevApplicants) =>
-          prevApplicants.map((applicant) =>
-            applicant.application_id === applicantId
-              ? { ...applicant, status: "Scholar" }
-              : applicant
+        setActiveScholars((prevScholars) =>
+          prevScholars.map((scholar) =>
+            scholar.application_id === applicantId
+              ? { ...scholar, status: "Scholar" }
+              : scholar
           )
         );
         console.log(`Applicant with ID: ${applicantId} has been accepted.`);
       } else {
-        console.error("Failed to update applicant status.");
+        console.error("Failed to update scholar status.");
       }
     } catch (error) {
-      console.error("Error updating applicant status:", error);
+      console.error("Error updating scholar status:", error);
     }
   };
 
@@ -92,15 +94,32 @@ const ActiveScholarsPage = () => {
     console.log(`Rejecting applicant ID: ${applicantId}`);
   };
 
+  const handleSearch = (query) => {
+    const lowercasedQuery = query.toLowerCase();
+    const filtered = activeScholars.filter((scholar) =>
+      scholar.first_name.toLowerCase().includes(lowercasedQuery) ||
+      scholar.last_name.toLowerCase().includes(lowercasedQuery) ||
+      scholar.school.toLowerCase().includes(lowercasedQuery) ||
+      scholar.status.toLowerCase().includes(lowercasedQuery)
+    );
+    setFilteredScholars(filtered);
+  };
+
   return (
     <div className="pending-scholars-page">
       <Header />
       <div className="file-manager-header">
-            <h2>Active Scholars</h2>
-            <SearchBar />
-            <BackButton />
-        </div>
-      <ScholarsTable scholars={activeScholars} />
+        <h2>Active Scholars</h2>
+        <SearchBar onSearch={handleSearch} />
+        <BackButton />
+      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <ScholarsTable scholars={filteredScholars} />
+      )}
     </div>
   );
 };

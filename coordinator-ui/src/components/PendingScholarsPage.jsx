@@ -8,13 +8,16 @@ import "./PendingScholarsPage.css";
 
 const PendingScholarsPage = () => {
   const [pendingScholars, setPendingScholars] = useState([]);
+  const [filteredScholars, setFilteredScholars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPendingScholars = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:5000/api/pending_scholars");
+        const response = await axios.get(
+          "http://127.0.0.1:5000/api/pending_scholars"
+        );
         const applicantsData = response.data;
 
         const formattedScholars = applicantsData.map((pending_scholar) => ({
@@ -54,9 +57,9 @@ const PendingScholarsPage = () => {
         }));
 
         setPendingScholars(formattedScholars);
+        setFilteredScholars(formattedScholars);
       } catch (err) {
         console.error("Error fetching pending scholars:", err);
-        setError("Failed to load pending scholars.");
       } finally {
         setLoading(false);
       }
@@ -67,16 +70,17 @@ const PendingScholarsPage = () => {
 
   const handleAccept = async (applicantId) => {
     try {
-      const response = await axios.put(`http://127.0.0.1:5000/api/pending_scholars/${applicantId}`, {
-        status: "scholar",
-      });
+      const response = await axios.put(
+        `http://127.0.0.1:5000/api/pending_scholars/${applicantId}`,
+        { status: "scholar" }
+      );
 
       if (response.data.success) {
-        setScholars((prevApplicants) =>
-          prevApplicants.map((applicant) =>
-            applicant.application_id === applicantId
-              ? { ...applicant, status: "Scholar" }
-              : applicant
+        setFilteredScholars((prevScholars) =>
+          prevScholars.map((scholar) =>
+            scholar.applicant_id === applicantId
+              ? { ...scholar, status: "Scholar" }
+              : scholar
           )
         );
         console.log(`Applicant with ID: ${applicantId} has been accepted.`);
@@ -92,15 +96,36 @@ const PendingScholarsPage = () => {
     console.log(`Rejecting applicant ID: ${applicantId}`);
   };
 
+  const handleSearch = (query) => {
+    const lowerCaseQuery = query.toLowerCase();
+
+    const filtered = pendingScholars.filter((scholar) => {
+      return (
+        scholar.first_name.toLowerCase().includes(lowerCaseQuery) ||
+        scholar.last_name.toLowerCase().includes(lowerCaseQuery) ||
+        scholar.school.toLowerCase().includes(lowerCaseQuery) ||
+        scholar.year.includes(query)
+      );
+    });
+
+    setFilteredScholars(filtered);
+  };
+
   return (
     <div className="pending-scholars-page">
       <Header />
       <div className="file-manager-header">
-            <h2>Pending Scholars</h2>
-            <SearchBar />
-            <BackButton />
-        </div>
-      <ScholarsTable scholars={pendingScholars} />
+        <h2>Pending Scholars</h2>
+        <SearchBar onSearch={handleSearch} />
+        <BackButton />
+      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <ScholarsTable scholars={filteredScholars} />
+      )}
     </div>
   );
 };

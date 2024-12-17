@@ -7,8 +7,10 @@ import axios from "axios";
 
 const InactiveScholarsPage = () => {
   const [inactiveScholars, setInactiveScholars] = useState([]);
+  const [filteredScholars, setFilteredScholars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     const fetchInactiveScholars = async () => {
@@ -33,13 +35,13 @@ const InactiveScholarsPage = () => {
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" "),
           remarks: inactive_scholar.remarks || "N/A",
-          
         }));
 
         setInactiveScholars(formattedScholars);
+        setFilteredScholars(formattedScholars);
       } catch (err) {
-        console.error("Error fetching pending scholars:", err);
-        setError("Failed to load pending scholars.");
+        console.error("Error fetching inactive scholars:", err);
+        setError("Failed to load inactive scholars.");
       } finally {
         setLoading(false);
       }
@@ -48,16 +50,34 @@ const InactiveScholarsPage = () => {
     fetchInactiveScholars();
   }, []);
 
+  const handleSearch = (keyword) => {
+    setSearchKeyword(keyword);
+    const lowerKeyword = keyword.toLowerCase();
+
+    const filtered = inactiveScholars.filter((scholar) =>
+      `${scholar.first_name} ${scholar.last_name} ${scholar.school} ${scholar.status}`
+        .toLowerCase()
+        .includes(lowerKeyword)
+    );
+
+    setFilteredScholars(filtered);
+  };
 
   return (
-    <div className="pending-scholars-page">
+    <div className="inactive-scholars-page">
       <Header />
       <div className="file-manager-header">
-            <h2>Inactive Scholars</h2>
-            <SearchBar />
-            <BackButton />
-        </div>
-      <ScholarsTable scholars={inactiveScholars} />
+        <h2>Inactive Scholars</h2>
+        <SearchBar onSearch={handleSearch} />
+        <BackButton />
+      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <ScholarsTable scholars={filteredScholars} />
+      )}
     </div>
   );
 };

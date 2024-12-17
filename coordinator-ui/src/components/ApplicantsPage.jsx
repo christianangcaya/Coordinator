@@ -8,6 +8,7 @@ import axios from "axios";
 
 const ApplicantsPage = () => {
   const [applicantsData, setScholars] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchApplicants = async () => {
@@ -22,7 +23,23 @@ const ApplicantsPage = () => {
     fetchApplicants();
   }, []);
 
-  const applicants = applicantsData.map((applicant) => ({
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const filteredApplicants = applicantsData.filter((applicant) => {
+    const fullName = `${applicant.first_name} ${applicant.last_name} ${
+      applicant.middle_name || ""
+    }`.toLowerCase();
+    const appId = applicant.application_id.toLowerCase();
+
+    return (
+      fullName.includes(searchQuery.toLowerCase()) ||
+      appId.includes(searchQuery.toLowerCase())
+    );
+  });
+
+  const applicants = filteredApplicants.map((applicant) => ({
     applicant_id: applicant.application_id,
     contact_number: applicant.contact_number || "N/A",
     last_name: applicant.last_name,
@@ -57,12 +74,14 @@ const ApplicantsPage = () => {
 
   const handleAccept = async (applicantId) => {
     try {
-      const response = await axios.put(`http://127.0.0.1:5000/api/applicants/${applicantId}`, {
-        status: "pending_scholar",
-      });
+      const response = await axios.put(
+        `http://127.0.0.1:5000/api/applicants/${applicantId}`,
+        {
+          status: "pending_scholar",
+        }
+      );
 
       if (response.data.success) {
-        window.location.reload();
         setScholars((prevApplicants) =>
           prevApplicants.map((applicant) =>
             applicant.application_id === applicantId
@@ -79,7 +98,6 @@ const ApplicantsPage = () => {
     }
   };
 
-
   const handleReject = (applicantId) => {
     console.log(`Rejected applicant with ID: ${applicantId}`);
   };
@@ -87,11 +105,11 @@ const ApplicantsPage = () => {
   return (
     <div className="applicants-page">
       <Header />
-        <div className="file-manager-header">
-            <h2>Applicants</h2>
-            <SearchBar />
-            <BackButton />
-        </div>
+      <div className="file-manager-header">
+        <h2>Applicants</h2>
+        <SearchBar onSearch={handleSearch} />
+        <BackButton />
+      </div>
       <ScholarsTable scholars={applicants} />
     </div>
   );
