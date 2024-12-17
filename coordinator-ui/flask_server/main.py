@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 import os
 from flask_cors import CORS
 import re
@@ -148,11 +148,38 @@ def list_files(application_id):
 
     try:
         files = os.listdir(base_path)
-        app.logger.info(f"Files found: {files}")
-        return jsonify({"path": base_path, "files": files}), 200
+        # Generate full URLs for each file
+        file_urls = [
+            f"http://127.0.0.1:5000/api/files/{application_id}/{file}" 
+            for file in files
+        ]
+        return jsonify({"files": file_urls}), 200
     except Exception as e:
-        app.logger.error(f"Error listing files: {str(e)}")
         return jsonify({"error": f"Unable to list files: {str(e)}"}), 500
+
+@app.route('/api/files/<application_id>/<filename>', methods=['GET'])
+def serve_file(application_id, filename):
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor(dictionary=True)
+    try:
+        # Parameterized query to fetch directory path
+        query = "SELECT final_req_folder_path FROM final_requirements WHERE application_id = %s"
+        cursor.execute(query, (application_id,))
+        result = cursor.fetchone()
+    finally:
+        cursor.close()
+        connection.close()
+
+    if not result:
+        return jsonify({"error": "Invalid application ID or no files found"}), 404
+
+    base_path = result['final_req_folder_path']
+    try:
+        # Serve the requested file from the directory
+        return send_from_directory(base_path, filename)
+    except FileNotFoundError:
+        return jsonify({"error": f"File {filename} not found"}), 404
+
     
 @app.route("/api/applicants", methods=["GET"])
 def get_applicants_with_info():

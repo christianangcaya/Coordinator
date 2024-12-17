@@ -70,14 +70,15 @@ const DocumentPopup = ({ scholar, onClose }) => {
         {error && <p className="error">{error}</p>}
         <div className="documents-grid">
           {files.length > 0 ? (
-            files.map((file, index) => (
+            files.map((fileUrl, index) => (
               <div key={index} className="document-item">
                 <img
-                  src="https://via.placeholder.com/100"
-                  alt="Document Icon"
+                  src={fileUrl} // Use the file URL provided by the server
+                  alt={`Document ${index + 1}`}
                   className="document-icon"
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
                 />
-                <p>{file}</p>
+                <p>{fileUrl.split("/").pop()}</p>
               </div>
             ))
           ) : (
