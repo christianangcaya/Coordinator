@@ -8,39 +8,16 @@ const DocumentPopup = ({ scholar, onClose }) => {
   const name = `${scholar.last_name}, ${scholar.first_name} ${scholar.middle_name} ${scholar.suffix}`;
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(null);
-
-  const batch = scholar.year;
-  const lastName = scholar.last_name;
-  const getFolderRange = (lastName) => {
-    const firstLetter = lastName[0].toUpperCase();
-    if ("A" <= firstLetter && firstLetter <= "C") return "A-C";
-    if ("D" <= firstLetter && firstLetter <= "F") return "D-F";
-    if ("G" <= firstLetter && firstLetter <= "I") return "G-I";
-    if ("J" <= firstLetter && firstLetter <= "L") return "J-L";
-    if ("M" <= firstLetter && firstLetter <= "O") return "M-O";
-    if ("P" <= firstLetter && firstLetter <= "R") return "P-R";
-    if ("S" <= firstLetter && firstLetter <= "U") return "S-U";
-    if ("V" <= firstLetter && firstLetter <= "Z") return "V-Z";
-    return "Other";
-  };
-  const index = getFolderRange(lastName);
   const applicationId = scholar.applicant_id;
 
   useEffect(() => {
     if (scholar) {
       const fetchFiles = async () => {
         try {
-          console.log("Fetching files for:", {
-            batch,
-            index,
-            lastName,
-            applicationId,
-          });
-
+          const BASE_URL = "http://127.0.0.1:5000";
           const response = await axios.get(
-            `http://127.0.0.1:5000/api/${batch}/${index}/${lastName}/${applicationId}/scholar_files`
+            `${BASE_URL}/api/${applicationId}/scholar_files`
           );
-
           console.log("Server Response:", response.data);
           setFiles(response.data.files || []);
         } catch (err) {
