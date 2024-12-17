@@ -33,9 +33,8 @@ const DocumentPopup = ({ scholar, onClose }) => {
     }
   }, [scholar]);
 
-  // Function to close the preview
-  const closePreview = () => {
-    setPreviewImage(null);
+  const handleClosePreview = () => {
+    setPreviewImage(null); // Close the preview by resetting the image state
   };
 
   return (
@@ -74,6 +73,13 @@ const DocumentPopup = ({ scholar, onClose }) => {
         </div>
         <h2>Documents</h2>
         {error && <p className="error">{error}</p>}
+        {/* Preview Section */}
+        {previewImage && (
+          <div className="preview-section">
+            <h3>Document Preview</h3>
+            <img src={previewImage} alt="Preview" className="preview-image" />
+          </div>
+        )}
         <div className="documents-grid">
           {files.length > 0 ? (
             files.map((fileUrl, index) => (
@@ -96,20 +102,6 @@ const DocumentPopup = ({ scholar, onClose }) => {
             <p>No files available.</p>
           )}
         </div>
-        {/* Image Preview Modal */}
-        {previewImage && (
-          <div className="image-preview-modal" onClick={closePreview}>
-            <div
-              className="image-preview-content"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button className="close-preview" onClick={closePreview}>
-                ✕
-              </button>
-              <img src={previewImage} alt="Preview" className="preview-image" />
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
