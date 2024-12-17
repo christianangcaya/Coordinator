@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import ScholarsTable from "./ScholarsTable";
+import BackButton from "./BackButton";
+import SearchBar from "./SearchBar";
 import axios from "axios";
 
 const InactiveScholarsPage = () => {
@@ -50,7 +52,11 @@ const InactiveScholarsPage = () => {
   return (
     <div className="pending-scholars-page">
       <Header />
-      <h2>Inactive Scholars Page</h2>
+      <div className="file-manager-header">
+            <h2>Inactive Scholars</h2>
+            <SearchBar />
+            <BackButton />
+        </div>
       <ScholarsTable scholars={inactiveScholars} />
     </div>
   );

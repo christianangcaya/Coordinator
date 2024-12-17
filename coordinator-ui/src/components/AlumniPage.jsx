@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import ScholarsTable from "./ScholarsTable";
+import BackButton from "./BackButton";
+import SearchBar from "./SearchBar";
 import axios from "axios";
 
 const AlumniPage = () => {
@@ -40,7 +42,11 @@ const AlumniPage = () => {
   return (
     <div className="applicants-page">
       <Header />
-      <h2>Alumni Page</h2>
+      <div className="file-manager-header">
+            <h2>Alumni</h2>
+            <SearchBar />
+            <BackButton />
+        </div>
       <ScholarsTable scholars={alumni} />
     </div>
   );

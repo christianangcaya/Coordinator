@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import ScholarsTable from "./ScholarsTable";
+import BackButton from "./BackButton";
+import SearchBar from "./SearchBar";
 import "./ApplicantsPage.css";
 import axios from "axios";
 
@@ -85,7 +87,11 @@ const ApplicantsPage = () => {
   return (
     <div className="applicants-page">
       <Header />
-      <h2>Applicants Page</h2>
+        <div className="file-manager-header">
+            <h2>Applicants</h2>
+            <SearchBar />
+            <BackButton />
+        </div>
       <ScholarsTable scholars={applicants} />
     </div>
   );
